@@ -36,17 +36,20 @@ def create_osm_way(id, nodes, tags = {}):
     return way
 
 def add_osm_element(osm, type, zoom, tags = {}):
+    """ add legend element to a given OSM DOM tree
+
+    valid types are:
+    * point:     single POI
+    * line:      linear element, like e.g. a road
+    * smalline:  smaller version of "line"
+    * rectangle: rectangular area, twice as wide as high
+    * square:    quadratic area
+    """
     dlon = 0.006 * (2**13)/(2**zoom)   #length
     dlat = 0.003 * (2**13)/(2**zoom)   #height
 
     if type == 'point':
         tags['point'] = 'yes'
-        osm.append(create_osm_node(1, 0, 0, tags))
-        return (-dlon/2, -dlat, dlon/2, dlat)
-
-    if type == 'pointtext':
-        tags['point'] = 'yes'
-        tags['name'] = 'name' # TODO: WTF?
         osm.append(create_osm_node(1, 0, 0, tags))
         return (-dlon/2, -dlat, dlon/2, dlat)
 
@@ -60,20 +63,6 @@ def add_osm_element(osm, type, zoom, tags = {}):
         osm.append(create_osm_node(1, 0, -dlon/2*0.6))
         osm.append(create_osm_node(2, 0, dlon/2*.06))
         osm.append(create_osm_way(3, (1, -2), tags))
-        return (-dlon/2, -dlat/2*1.5, dlon/2, dlat/2*1.5)
-
-    if type == 'linetext':
-        osm.append(create_osm_node(1, 0, -dlon/2))
-        osm.append(create_osm_node(2, 0, dlon/2))
-        tags['name'] = 'name'
-        osm.append(create_osm_way(3, (1, 2), tags))
-        return (-dlon/2, -dlat/2*1.5, dlon/2, dlat/2*1.5)
-
-    if type == 'lineshield':
-        osm.append(create_osm_node(1, 0, -dlon/2))
-        osm.append(create_osm_node(2, 0, dlon/2))
-        tags['ref'] = 'ref'
-        osm.append(create_osm_way(3, (1, 2), tags))
         return (-dlon/2, -dlat/2*1.5, dlon/2, dlat/2*1.5)
 
     if type == 'rectangle':
@@ -93,26 +82,6 @@ def add_osm_element(osm, type, zoom, tags = {}):
         tags["area"] = "yes"
         osm.append(create_osm_way(5, (1,2,3,4,1), tags))
         return (-3/4*dlon, -3/4*dlat, 3/4*dlon, 3/4*dlat)
-
-    if type == 'rectangletext':
-        osm.append(create_osm_node(1,  dlat/2, -dlon/2))
-        osm.append(create_osm_node(2,  dlat/2,  dlon/2))
-        osm.append(create_osm_node(3, -dlat/2,  dlon/2))
-        osm.append(create_osm_node(4, -dlat/2, -dlon/2))
-        tags['name'] = 'name'
-        tags["area"] = 'yes'
-        osm.append(create_osm_way(5, (1,2,3,4,1), tags))
-        return (-3/4*dlon, -3/4*dlat, 3/4*dlon, 3/4*dlat)
-
-    if type == 'squaretext':
-        osm.append(create_osm_node(1,  dlat/2, -dlon/2))
-        osm.append(create_osm_node(2,  dlat/2,  dlon/2))
-        osm.append(create_osm_node(3, -dlat/2,  dlon/2))
-        osm.append(create_osm_node(4, -dlat/2, -dlon/2))
-        tags['name'] = 'name'
-        tags["area"] = 'yes'
-        osm.append(create_osm_way(5, (1,2,3,4,1), tags))
-        return (-3/4*dlon, -3/4*dlat, 3/4*dlon, 3/4*dlat)    
 
     if type == 'rectanglepoint':
         osm.append(create_osm_node(1,  dlat/2, -dlon/2))
