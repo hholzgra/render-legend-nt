@@ -1,11 +1,11 @@
 from lxml import etree
+from os import path
 
 def convert_stylesheet(old_file, new_file, old_db_name, new_db_name):
     """ Convert a Mapnik XML stylesheet for legend creation use
     * removes all Mapnik layers not using the "postgis" input plugin
     * removes all "postgis" layers not referring to the "old_db_name"
     * rewrites database name in remaining layers
-    TODO: convert relative file pathes into absolute ones
     """
 
     # parse original XML file
@@ -53,6 +53,14 @@ def convert_stylesheet(old_file, new_file, old_db_name, new_db_name):
             dbname = datasource.find("./Parameter[@name='dbname']")
             if dbname is not None:
                 dbname.text = new_db_name
+
+    # make file="..." attribute paths absolute
+    old_dir = path.dirname(path.realpath(old_file))
+    for tag in root.findall(".//*[@file]"):
+        filename = tag.get("file")
+        if not path.isabs(filename):
+            filename = path.join(old_dir, filename)
+            tag.set("file", filename)
 
     # write back modified XML stylesheet
     tree.write(new_file)
