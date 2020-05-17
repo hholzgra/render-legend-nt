@@ -1,0 +1,52 @@
+title: Legende
+sections:
+  - title: Straßen
+    lines:
+      - title: Autobahn
+        elements:
+          - caption: highway
+            type:    line
+            tags:
+              highway: motorway
+              ref:     A1
+          - caption: highway
+            type:    line
+            tags:
+              highway: motorway
+          - caption: highway
+            type:    line
+            tags:
+              highway: motorway
+              tunnel:  'yes'
+      - title: Kraftfahrstraße
+        elements:
+          - caption: trunk
+            type:    line
+            tags:
+              highway: trunk
+              ref:     B1
+          - caption: trunk
+            type:    line
+            tags:
+              highway: trunk
+          - caption: highway
+            type:    line
+            tags:
+              highway: trunk
+              tunnel:  'yes'
+  - title: Gastronomie
+    lines:
+      - title: Kneipe, Cafe, Bar
+        elements:
+          - caption: pub
+            type:    point
+            tags:
+              amenity: pub
+          - caption: cafe
+            type:    point
+            tags:
+              amenity: cafe
+          - caption: bar
+            type:    point
+            tags:
+              amenity: bar
